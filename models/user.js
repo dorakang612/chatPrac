@@ -1,0 +1,17 @@
+const mongoose = require("mongoose");
+
+const { Schema } = mongoose;
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  inAppName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
+
+module.exports = mongoose.model("User", userSchema);

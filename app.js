@@ -5,11 +5,18 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 require("dotenv").config();
 
+// 라우터를 사용합니다.
 const indexRouter = require("./routes");
 
+// Socket.IO를 통해 웹소켓을 사용합니다.
 const webSocket = require("./socket");
+const connectDB = require("./models/connectDB");
 
+// express 객체를 만듭니다.
 const app = express();
+
+// DB에 연결합니다.
+connectDB();
 
 // 세션 설정
 const sessionMiddleware = session({

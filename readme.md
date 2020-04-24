@@ -49,3 +49,9 @@ chatPrac
 6. socket.js, chat.pug 생성
 
 웹 소켓을 사용하기 위한 소스코드를 작성합니다.
+
+7. MongoDB를 사용하기 위한 코드 추가
+
+- models/user.js : 사용자 스키마
+- models/room.js : 채팅방 스키마
+- models/connect.js : 몽고디비와 연결하는 코드
