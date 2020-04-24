@@ -5,7 +5,10 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     console.log(`A User Connected, SocketID : ${socket.id}`);
-    socket.broadcast.emit("broadcast_intro", `${socket.id} entered room.`);
+    socket.broadcast.emit(
+      "broadcast_intro",
+      `System Message - ${socket.id} entered room.`
+    );
 
     socket.on("disconnect", function () {
       console.log(`User ${socket.id} left room.`);
