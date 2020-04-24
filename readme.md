@@ -45,3 +45,7 @@ chatPrac
 - app.js : 서버 설정을 합니다.
 - views : express 서버 실행시 진입할 화면들입니다.
 - routes : express 서버로 접속시 해당 주소에 맞는 탬플릿을 전달해줄 라우터입니다.
+
+6. socket.js, chat.pug 생성
+
+웹 소켓을 사용하기 위한 소스코드를 작성합니다.

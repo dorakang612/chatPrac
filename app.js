@@ -7,6 +7,8 @@ require("dotenv").config();
 
 const indexRouter = require("./routes");
 
+const webSocket = require("./socket");
+
 const app = express();
 
 // 세션 설정
@@ -54,8 +56,8 @@ app.use((req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-  res.local.message = err.message;
-  res.local.error = req.app.get("env") === "development" ? err : {};
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   res.status(err.status || 500);
   res.render("error");
@@ -65,5 +67,8 @@ app.use((err, req, res, next) => {
 const server = app.listen(app.get("port"), () => {
   console.log(app.get("port"), "번 포트에서 대기중입니다.");
 });
+
+// Express Server와 Socket.io 연결
+webSocket(server);
 
 module.exports = app;
