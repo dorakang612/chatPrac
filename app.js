@@ -15,7 +15,7 @@ const connectDB = require("./models/connectDB");
 // express 객체를 만듭니다.
 const app = express();
 
-// DB에 연결합니다.
+// DB연결을 수행합니다.
 connectDB();
 
 // 세션 설정
