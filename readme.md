@@ -55,3 +55,11 @@ chatPrac
 - models/user.js : 사용자 스키마
 - models/room.js : 채팅방 스키마
 - models/connect.js : 몽고디비와 연결하는 코드
+
+8. User와 Room 등록화면 및 코드 작성
+
+- views/enrollUser.pug : 사용자를 등록하는 화면입니다.
+- views/enrollRoom.pug : 채팅방을 등록하는 화면입니다.
+- routes/index.js : request에 따라 정보들을 DB에 저장하도록 유도합니다.
+- views/users.pug : 등록된 유저들의 inAppName들을 확인합니다.
+- views/rooms.pug : 등록된 채팅방의 정보들을 확인합니다.

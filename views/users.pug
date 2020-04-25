@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 사용자 목록
+  fieldset
+    legned 사용자 목록
+    table
+      thead
+        tr
+          th E-Mail
+          th 채팅방 내 이름
+          th 사용자 ObjectID
+      tbody
+        for user in users
+          tr(data-id=user._id)
+            td= user.email
+            td= user.inAppName
+            td= user._id
