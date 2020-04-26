@@ -49,6 +49,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // request의 쿠키를 해석해주는 미들웨어
 app.use(cookieParser(process.env.COOKIE_SECRET));
+// 세션을 이용하기 위한 미들웨어
 app.use(sessionMiddleware);
 
 // index 라우터
@@ -76,6 +77,7 @@ const server = app.listen(app.get("port"), () => {
 });
 
 // Express Server와 Socket.io 연결
-webSocket(server);
+// socket.js에서 app과 sessionMidleware를 사용하기 위해서 인자로 넘겨줍니다.
+webSocket(server, app, sessionMiddleware);
 
 module.exports = app;

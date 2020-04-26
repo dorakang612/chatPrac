@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  fieldset
+    legend 채팅방 등록
+    form(action='/enrollRoom' method='post')
+      div: input(name='roomName' placeholder='채팅방 이름')
+      div: input(name='password' placeholder='비밀번호, 미입력시 공개방이 됩니다.')
+      div: button(type='submit') 등록

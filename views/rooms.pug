@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 채팅방 목록
+  fieldset
+    legned 채팅방 목록
+    table
+      thead
+        tr
+          th 채팅방 이름
+          th 공개 여부
+          th 채팅방 개설자
+      tbody
+        for room in rooms
+          tr(data-id=room._id)
+            td= room.roomName
+            td= room.password ? "비공개" : "공개"
+            td= room.host

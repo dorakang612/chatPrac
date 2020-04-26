@@ -11,7 +11,7 @@ const roomSchema = new Schema({
     required: true,
   },
   host: {
-    type: ObjectId,
+    type: String,
     required: true,
     ref: "User",
   },
