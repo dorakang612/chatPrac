@@ -1,0 +1,78 @@
+extends layout
+
+block content
+  fieldset
+    legned 채팅방 목록
+    table
+      thead
+        tr
+          th 채팅방 이름
+          th 공개 여부
+          th 채팅방 개설자
+      tbody
+        for room in rooms
+          tr(data-id=room._id)
+            td= room.roomName
+            td= room.password ? "비공개" : "공개"
+            td= room.host
+            -let password = room.password ? 'true' : 'false';
+            td: button(data-password=password data-id=room._id).join-btn 채팅에 참여하기
+  .error-message= error
+  a(href='/enrollRoom') 채팅방 생성
+  br
+  a(href='/enrollUser') 사용자 등록
+  br
+  a(href='/users') 사용자 확인
+  script(src='/socket.io/socket.io.js')
+  script.
+    let socket = io.connect('http://localhost:3000/room', {
+      path: '/socket.io'
+    });
+
+    socket.on('newRoom', function (data) {
+      let tr = document.createElement('tr');
+      let td = document.createElement('td');
+
+      td.textContent = data.roomName;
+      tr.appendChild(td);
+      
+      td = document.createElement('td');
+      td.textContent = data.password ? '비공개' : '공개';
+      tr.appendChild(td);
+
+      td = document.createElement('td');
+      td.textContent = data.host;
+      tr.appendChild(td);
+
+      td = document.createElement('td');
+      let button = document.createElement('button');
+      button.textContent = '채팅에 참여하기';
+      button.dataset.password = data.password ? 'true' : 'false';
+      button.dataset.id = data._id;
+      button.addEventListener('click', enterRoom);
+      td.appendChild(button);
+      tr.appendChild(td);
+      tr.dataset.id = data._id;
+      document.querySelector('table tbody').appendChild(tr);
+    });
+
+    socket.on('removeRoom', (data)=>{
+      document.querySelectorAll('tbody tr').forEach((tr)=>{
+        if(tr.dataset.id === data) {
+          tr.parentNode.removeChild(tr);
+        }
+      })
+    });
+
+    function enterRoom(e) {
+      if(e.target.dataset.password === 'true'){
+        const password = prompt('비밀번호를 입력하세요');
+        location.href = '/room/' + e.target.dataset.id + '?password=' + password;
+      } else {
+        location.href = '/room/' + e.target.dataset.id;
+      }
+    }
+
+    document.querySelectorAll('.join-btn').forEach((btn)=>{
+      btn.addEventListener('click',enterRoom);
+    });

@@ -63,3 +63,12 @@ chatPrac
 - routes/index.js : request에 따라 정보들을 DB에 저장하도록 유도합니다.
 - views/users.pug : 등록된 유저들의 inAppName들을 확인합니다.
 - views/rooms.pug : 등록된 채팅방의 정보들을 확인합니다.
+
+9. views/rooms.pug를 통해 채팅방 입장 추가
+
+- socket.js : 방목록들을 볼 수 있는 rooms를 room 네임스페이스에 두고, 채팅방으로 입장시 chat 네임스페이스에 연결되도록 유지합니다. axios를 이용해서 HTTP 요청을 보내도록 합니다.
+- views/rooms.pug -> main.pug : 현재 등록된 방을 보여주고 있는데, 여기에 입장 버튼을 추가하여 chat.pug가 랜더링되도록 합니다.
+- views/chat.pug : 메세지를 보내는 form 태그의 action 속성에 /chat을 추가하여 채팅 활성화합니다.
+- routes/index.js : 처음 접속시 세션에 inAppName이 있는지 확인하며, 없을 경우 enrollUser로 이동합니다. enrollUser에서 사용자 등록이 진행되며, 등록 완료시 채팅방 목록을 볼 수 있는 화면으로 넘어갑니다. 방마다 입장 버튼을 누르면 해당 방의 chatting을 보여주도록 유도합니다. 또한 새로운 채팅방이 생기거나 혹은 기존의 채팅방이 없어지면 이를 바로 반영하여 화면 구성 또한 바뀝니다.
+
+> 현재 사용자를 등록하고 다시 접속시에는 DB에 저장된 사용자를 지운 뒤 동일 이메일과 이름으로 접속 가능합니다.
