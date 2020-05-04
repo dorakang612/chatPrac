@@ -5,6 +5,7 @@ const {
   Types: { ObjectId },
 } = Schema;
 
+// 채팅방 스키마
 const roomSchema = new Schema({
   roomName: {
     type: String,
@@ -15,9 +16,7 @@ const roomSchema = new Schema({
     required: true,
     ref: "User",
   },
-  participants: {
-    type: Array,
-  },
+  participants: Array,
   password: String,
   chats: Array,
   createdAt: {

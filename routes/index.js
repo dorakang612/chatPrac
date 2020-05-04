@@ -94,6 +94,11 @@ router.get("/room/:id", async (req, res, next) => {
       return res.redirect("/");
     }
 
+    // 채팅방에 참여하면 사용자의 이메일과 inAppName을 참여자 목록에 추가합니다.
+    const user = await User.findOne({ inAppName: req.session.inAppName });
+    const participant = { email: user.email, inAppName: user.inAppName };
+    await Room.update(room, { $push: { participants: participant } });
+
     // 위의 모든 if문을 거치면 chat화면을 렌더링 합니다.
     return res.render("chat", {
       room,
@@ -133,6 +138,9 @@ router.post("/room/:id/chat", async (req, res, next) => {
     chat: req.body.chat,
     date: chatDate,
   };
+
+  // 채팅 내역을 DB에 저장합니다.
+  await Room.update({ _id: req.params.id }, { $push: { chats: message } });
 
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", message);
   res.send("ok");

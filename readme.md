@@ -77,3 +77,7 @@ chatPrac
 
 - routes/index.js : Date()를 이용해 채팅을 보낸 시각 정보를 생성합니다.
 - views/chat.pug : 시간 정보를 보여 줍니다.
+
+11. 채팅 참여자와 채팅 내역 DB에 추가
+
+- routes/index.js : participants와 chats에 데이터를 push 해줍니다.
