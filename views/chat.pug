@@ -87,6 +87,10 @@ html(lang="en")
           chat.textContent = data.chat;
           div.appendChild(chat);
 
+          let date = document.createElement('div');
+          date.textContent = data.date;
+          div.appendChild(date);
+
           document.querySelector('#messages').appendChild(div);
         });
 

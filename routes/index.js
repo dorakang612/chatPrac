@@ -122,10 +122,18 @@ router.delete("/room/:id", async (req, res) => {
 
 // 채팅방 내에서 채팅을 보내면 동작하는 라우터 입니다.
 router.post("/room/:id/chat", async (req, res, next) => {
+  const date = new Date();
+  const chatDate = `${date.getFullYear()}.${
+    date.getMonth() + 1
+  }.${date.getDate()}.${
+    date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
+  }:${date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()}`;
   const message = {
     user: req.session.inAppName,
     chat: req.body.chat,
+    date: chatDate,
   };
+
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", message);
   res.send("ok");
 });
