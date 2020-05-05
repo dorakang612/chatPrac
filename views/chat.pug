@@ -44,9 +44,14 @@ html(lang="en")
       }
   body
     ul#messages
-        form#chat-form(action="/chat")
-            input#chat(autocomplete="off")
-            button(type='submit') 전송
+      for chat in room.chats
+        div.chatting
+          div.user=chat.user
+          div.text=chat.chat
+          div.date=chat.date
+    form#chat-form(action="/chat")
+      input#chat(autocomplete="off")
+      button(type='submit') 전송
     
     script(src="/socket.io/socket.io.js")
     script(src="https://code.jquery.com/jquery-1.11.1.js")
