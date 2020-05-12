@@ -4,15 +4,15 @@
 
 2. package.json을 생성합니다.
 
-```cmd
-npm init
-```
+   ```cmd
+   npm init
+   ```
 
 3. 필요한 모듈을 설치합니다.
 
-```cmd
->npm i [package_name]
-```
+   ```cmd
+   >npm i [package_name]
+   ```
 
 - express : 서버프레임워크
 - cookie-parser : 쿠키 해석 미들웨어
@@ -27,17 +27,18 @@ npm init
 
 ```
 chatPrac
- ㄴpublic // 클라이언트에서 접근 할 수 있는 폴더입니다.
+ ㄴpublic                 // 클라이언트에서 접근 할 수 있는 폴더입니다.
    ㄴimages
    ㄴjavascript
    ㄴstyles
- ㄴmodels // DB에 관한 스키마와 DB연결 코드가 있는 폴더입니다.
- ㄴroutes // 라우터들이 있는 폴더입니다.
- ㄴviews // 탬플릿들이 있는 폴더입니다.
- ㄴapp.js // 프로젝트의 시작점이 되는 파일입니다.
- ㄴpackage.json
- ㄴ.env
- ㄴreadme.md
+ ㄴmodels                 // DB에 관한 스키마와 DB연결 코드가 있는 폴더입니다.
+ ㄴroutes                 // 라우터들이 있는 폴더입니다.
+   ㄴindex.js             // 진입점의 라우터입니다.
+ ㄴviews                  // 탬플릿들이 있는 폴더입니다.
+ ㄴapp.js                 // 프로젝트의 시작점이 되는 파일입니다.
+ ㄴpackage.json           // 프로젝트의 명세서입니다. 프로젝트 이름과 버전, 사용 모듈 등의 정보들이 담겨있습니다.
+ ㄴ.env                   // 환경변수, 비밀번호와 같이 보호되어야할 정보들이 담긴 파일입니다.
+ ㄴreadme.md              // 프로젝트의 설명 등을 적어둔 파일입니다.
 ```
 
 5. 초기 서버 설정을 합니다.
@@ -81,3 +82,11 @@ chatPrac
 11. 채팅 참여자와 채팅 내역 DB에 추가
 
 - routes/index.js : participants와 chats에 데이터를 push 해줍니다.
+
+12. 채팅방 입장시 이전의 채팅 내역을 보여줍니다.
+
+- views/chat.pug : routes/index.js에서 room/:id를 요청할 때 이에 대한 응답으로 room에 대한 정보를 넘겨주기 때문에, room의 chats 컬렉션에서 채팅들을 추출하여 보여줍니다.
+
+13. 브라우저의 탭을 닫아도 세션을 유지합니다.
+
+- app.js : sessionMidleware의 설정 중 saveUninitialized을 true로 바꿉니다.

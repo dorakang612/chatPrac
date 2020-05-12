@@ -21,7 +21,7 @@ connectDB();
 // 세션 설정
 const sessionMiddleware = session({
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: `${process.env.COOKIE_SECRET}`,
   cookie: {
     httpOnly: true,
