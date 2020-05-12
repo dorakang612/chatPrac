@@ -90,3 +90,72 @@ chatPrac
 13. 브라우저의 탭을 닫아도 세션을 유지합니다.
 
 - app.js : sessionMidleware의 설정 중 saveUninitialized을 true로 바꿉니다.
+
+14. ES6 모듈 운용 방식을 위해서 babel을 설치하고, .babelrc파일을 만들어 preset을 지정해줍니다.
+
+```cmd
+>npm i --save-dev @babel/core @babel/cli @babel/preset-env @babel/node
+```
+
+- @babel/core : 바벨의 주기능들을 포함하고 있는 모듈입니다.
+- @babel/cli : 명령 프롬프트 혹은 터미널에서 babel 명령어를 사용할 수 있습니다.
+- @babel/preset-env : 실행하는 환경에 따라 자동으로 해당 환경의 최신 JavaScript 문법을 적용하여 변환해주도록 유도하는 모듈입니다.
+- @babel/node : @babel/cli 에서 독립된 모듈로, Node.js CLI와 동일한 동작을 하지만 추가적으로 실행전에 babel의 preset들과 plugin들을 고려하여 파일을 변환 한뒤 실행합니다.
+
+.babelrc
+
+```
+{
+  "presets": ["@babel/preset-env"]
+}
+```
+
+preset-env를 설정함으로써 자동으로 알맞은 변환 형식을 찾습니다.
+
+15. 프로젝트의 구조를 변경합니다.
+
+```
+chatPrac
+ㄴpublic
+  ㄴimages
+  ㄴjavascript
+  ㄴstyles
+ㄴsrc
+  ㄴ models
+    ㄴconnectDB.js
+    ㄴroom.js
+    ㄴuser.js
+  ㄴroutes
+    ㄴindex.js
+  ㄴapp.js
+  ㄴsocket.js
+ㄴviews
+ㄴ.babelrc
+ㄴ.env
+ㄴ.gitignore
+ㄴpackage-lock.json
+ㄴpackage.json
+ㄴreadme.md
+```
+
+src에 주요 javascript 파일들을 넣습니다. 이유는 babel을 사용하여 변환을 할 때 한번에 처리하기 위해서입니다.
+
+16. package.json에 script를 수정합니다.
+
+```json
+{
+   ...
+   "scripts": {
+    "build": "babel src -d dist",
+    "start": "npm run build && node dist/app.js",
+    "start:dev": "nodemon --exec babel-node src/app.js"
+  },
+  ...
+}
+```
+
+- build : src 디렉터리에 있는 파일을 변환하여, dist라는 파일에 저장합니다. -d 는 out-dir의 축약어로, 변환된 파일을 저장할 목적지를 지정할 때 사용합니다.
+- start : build를 먼저 수행하고 후에 dist/app.js를 실행시킵니다.
+- start:dev : 개발 시에 자동으로 수정사항이 생기면 재시작 시키기위해서 사용할 스크립트입니다. --exec은 nodemon의 옵션으로, 뒤에 나오는 스크립트를 수행합니다. babel-node src/app.js는 babel의 presets와 plugins를 고려하여 변환한 이후, node를 실행합니다.
+
+평소 개발 시에는 npm run start:dev를 통해 실행시킵니다.

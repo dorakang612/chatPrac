@@ -1,9 +1,11 @@
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const { MONGODB_USER, MONGODB_PW, NODE_ENV } = process.env;
 const MONGO_URL = `mongodb://localhost:27017/chatPrac`;
 
-module.exports = () => {
+// module.exports =
+const connectDB = () => {
   // MongoDB에 연결하는 함수를 선언합니다.
   const connect = () => {
     // Node의 환경이 개발환경이 아니라면 쿼리내용을 콘솔을 통해 보도록합니다.
@@ -49,3 +51,5 @@ module.exports = () => {
   require("./user");
   require("./room");
 };
+
+export default connectDB;

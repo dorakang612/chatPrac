@@ -1,16 +1,27 @@
-const express = require("express");
-const path = require("path");
-const logger = require("morgan");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-require("dotenv").config();
+// const express = require("express");
+// const path = require("path");
+// const logger = require("morgan");
+// const cookieParser = require("cookie-parser");
+// const session = require("express-session");
+// require("dotenv").config();
+
+import express from "express";
+import path from "path";
+import logger from "morgan";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import dotenv from "dotenv";
+dotenv.config();
 
 // 라우터를 사용합니다.
-const indexRouter = require("./routes");
+// const indexRouter = require("./routes");
+import indexRouter from "./routes/index";
 
 // Socket.IO를 통해 웹소켓을 사용합니다.
-const webSocket = require("./socket");
-const connectDB = require("./models/connectDB");
+// const webSocket = require("./socket");
+// const connectDB = require("../models/connectDB");
+import webSocket from "./socket";
+import connectDB from "./models/connectDB";
 
 // express 객체를 만듭니다.
 const app = express();
@@ -30,7 +41,7 @@ const sessionMiddleware = session({
 });
 
 // 탬플릿과 탬플릿 엔진 설정
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
 
 // express 서버의 포트 지정
@@ -80,4 +91,5 @@ const server = app.listen(app.get("port"), () => {
 // socket.js에서 app과 sessionMidleware를 사용하기 위해서 인자로 넘겨줍니다.
 webSocket(server, app, sessionMiddleware);
 
-module.exports = app;
+// module.exports = app;
+export default app;
