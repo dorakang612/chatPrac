@@ -1,10 +1,3 @@
-// const express = require("express");
-// const path = require("path");
-// const logger = require("morgan");
-// const cookieParser = require("cookie-parser");
-// const session = require("express-session");
-// require("dotenv").config();
-
 import express from "express";
 import path from "path";
 import logger from "morgan";
@@ -14,12 +7,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // 라우터를 사용합니다.
-// const indexRouter = require("./routes");
 import indexRouter from "./routes/index";
 
 // Socket.IO를 통해 웹소켓을 사용합니다.
-// const webSocket = require("./socket");
-// const connectDB = require("../models/connectDB");
 import webSocket from "./socket";
 import connectDB from "./models/connectDB";
 
@@ -91,5 +81,4 @@ const server = app.listen(app.get("port"), () => {
 // socket.js에서 app과 sessionMidleware를 사용하기 위해서 인자로 넘겨줍니다.
 webSocket(server, app, sessionMiddleware);
 
-// module.exports = app;
 export default app;

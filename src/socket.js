@@ -1,10 +1,6 @@
-// const SocketIO = require("socket.io");
-// const axios = require("axios");
-
 import SocketIO from "socket.io";
 import axios from "axios";
 
-// module.exports =
 const webSocket = (server, app, sessionMidleware) => {
   const io = new SocketIO(server, { path: "/socket.io" }); // express의 서버를 인자로 받아와 연결해줍니다. 두 번째 인자로 서버에 대한 옵션을 줄 수 있는데, 현재 사용한 것은 client와 연결할 수 있는 경로입니다.
 

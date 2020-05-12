@@ -1,10 +1,8 @@
-// const mongoose = require("mongoose");
 import mongoose from "mongoose";
 
 const { MONGODB_USER, MONGODB_PW, NODE_ENV } = process.env;
 const MONGO_URL = `mongodb://localhost:27017/chatPrac`;
 
-// module.exports =
 const connectDB = () => {
   // MongoDB에 연결하는 함수를 선언합니다.
   const connect = () => {

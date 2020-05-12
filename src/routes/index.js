@@ -1,10 +1,6 @@
-// const express = require("express");
 import express from "express";
 
 // Schema를 가져옵니다.
-// const User = require("../models/user");
-// const Room = require("../models/room");
-
 import User from "../models/user";
 import Room from "../models/room";
 
@@ -150,5 +146,4 @@ router.post("/room/:id/chat", async (req, res, next) => {
   res.send("ok");
 });
 
-// module.exports = router;
 export default router;
