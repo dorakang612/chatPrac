@@ -3,7 +3,7 @@ extends layout
 block content
   fieldset
     legend 사용자 등록
-    form(action='/enrollUser' method='post')
+    form(action='/join' method='post')
       div: input(name='email' placeholder='E-Mail')
       div: input(name='inAppName' placeholder='채팅시 사용할 이름')
       div: button(type='submit') 등록

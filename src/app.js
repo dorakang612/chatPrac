@@ -6,8 +6,13 @@ import session from "express-session";
 import dotenv from "dotenv";
 dotenv.config();
 
+// 주소 목록을 사용합니다.
+import routes from "./routes";
+
 // 라우터를 사용합니다.
-import indexRouter from "./routes/index";
+import globalRouter from "./routers/globalRouter";
+import userRouter from "./routers/userRouter";
+import roomRouter from "./routers/roomRouter";
 
 // Socket.IO를 통해 웹소켓을 사용합니다.
 import webSocket from "./socket";
@@ -53,8 +58,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 // 세션을 이용하기 위한 미들웨어
 app.use(sessionMiddleware);
 
-// index 라우터
-app.use("/", indexRouter);
+// 라우터 등록
+app.use(routes.home, globalRouter);
+app.use(routes.users, userRouter);
+app.use(routes.rooms, roomRouter);
 
 // 404에러를 찾고 error handler로 인계하는 미들웨어
 app.use((req, res, next) => {

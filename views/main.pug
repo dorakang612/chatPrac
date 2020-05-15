@@ -18,11 +18,11 @@ block content
             -let password = room.password ? 'true' : 'false';
             td: button(data-password=password data-id=room._id).join-btn 채팅에 참여하기
   .error-message= error
-  a(href='/enrollRoom') 채팅방 생성
+  a(href='/create') 채팅방 생성
   br
-  a(href='/enrollUser') 사용자 등록
+  a(href='/join') 사용자 등록
   br
-  a(href='/users') 사용자 확인
+  a(href='/users/list') 사용자 확인
   script(src='/socket.io/socket.io.js')
   script.
     let socket = io.connect('http://localhost:3000/room', {

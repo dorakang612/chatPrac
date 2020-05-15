@@ -1,66 +1,27 @@
-import express from "express";
-
-// Schema를 가져옵니다.
-import User from "../models/user";
+import routes from "../routes";
 import Room from "../models/room";
 
-const router = express.Router();
-
-// localhost:3000/ 으로 접속시 처리할 라우터
-router.get("/", async (req, res) => {
+export const home = async (req, res) => {
   if (!req.session.inAppName) {
-    res.redirect("/enrollUser");
+    res.redirect("/join");
   } else {
     try {
       const rooms = await Room.find({});
-      res.render("main", { rooms, title: "Node 채팅방 목록" });
+      res.render("main", { rooms, title: "채팅방 목록" });
     } catch (error) {
       console.error(error);
       next(error);
     }
   }
-});
+};
 
-// localhost:3000/enrollUser 으로 접속시 처리할 라우터
-router.get("/enrollUser", (req, res) => {
-  res.render("enrollUser", { title: "사용자 등록" });
-});
+// 채팅방 생성화면 전송 미들웨어입니다.
+export const getCreateRoom = (req, res) => {
+  res.render("createRoom", { title: "채팅방 생성" });
+};
 
-// localhost:3000/enrollUser에서 사용자 정보를 입력하고 제출한 경우 처리할 라우터
-router.post("/enrollUSer", async (req, res, next) => {
-  try {
-    const user = new User({
-      email: req.body.email,
-      inAppName: req.body.inAppName,
-    });
-    req.session.email = user.email;
-    req.session.inAppName = user.inAppName;
-    await user.save();
-    res.redirect("/");
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-// localhost:3000/users 로 접속시 사용자 목록을 보여줄 라우터
-router.get("/users", async (req, res, next) => {
-  try {
-    const users = await User.find({});
-    res.render("users", { users, title: "사용자 목록" });
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-// localhost:3000/enrollRoom으로 접속시 채팅방 등록화면을 보여줄 라우터
-router.get("/enrollRoom", (req, res) => {
-  res.render("enrollRoom", { title: "채팅방 등록" });
-});
-
-// localhost:3000/enrollRoom에서 채팅방의 설정을 보내면 처리할 라우터
-router.post("/enrollRoom", async (req, res, next) => {
+// 채팅방의 생성 정보를 토대로 저장하는 미들웨어입니다.
+export const postCreateRoom = async (req, res, next) => {
   try {
     const room = new Room({
       roomName: req.body.roomName,
@@ -71,27 +32,29 @@ router.post("/enrollRoom", async (req, res, next) => {
 
     const io = req.app.get("io");
     io.of("/room").emit("newRoom", newRoom);
-    res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+    res.redirect(
+      `${routes.roomDetail(newRoom._id)}?password=${req.body.password}`
+    );
   } catch (error) {
     console.error(error);
     next(error);
   }
-});
+};
 
-// localhost:3000/room/:id 로 접속, 즉 특정 채팅방으로 접속시에 동작할 라우터입니다.
-router.get("/room/:id", async (req, res, next) => {
+// 채팅방 입장 미들웨어입니다.
+export const getRoomDetail = async (req, res, next) => {
   try {
     // 해당 채팅방에 대한 정보를 찾습니다.
     const room = await Room.findOne({ _id: req.params.id });
 
     // 방의 존재 여부를 확인합니다.
     if (!room) {
-      return res.redirect("/");
+      return res.redirect(`${routes.home}`);
     }
 
     // 방의 비밀번호를 알맞게 입력했는지 확인합니다.
     if (room.password && room.password !== req.query.password) {
-      return res.redirect("/");
+      return res.redirect(`${routes.home}`);
     }
 
     // 채팅방에 참여하면 사용자의 이메일과 inAppName을 참여자 목록에 추가합니다.
@@ -100,7 +63,7 @@ router.get("/room/:id", async (req, res, next) => {
     await Room.update(room, { $push: { participants: participant } });
 
     // 위의 모든 if문을 거치면 chat화면을 렌더링 합니다.
-    return res.render("chat", {
+    return res.render("chattingRoom", {
       room,
       title: room.roomName,
       user: req.session.inAppName,
@@ -109,10 +72,10 @@ router.get("/room/:id", async (req, res, next) => {
     console.error(error);
     return next(error);
   }
-});
+};
 
-// 채팅방에 대한 삭제 요청이 이루어지면 동작하는 라우터 입니다.
-router.delete("/room/:id", async (req, res) => {
+// 채팅방 삭제 미들웨어입니다.
+export const deleteRoomDetail = async (req, res) => {
   try {
     await Room.remove({ _id: req.params.id });
     res.send("ok");
@@ -123,10 +86,10 @@ router.delete("/room/:id", async (req, res) => {
     console.error(error);
     next(error);
   }
-});
+};
 
-// 채팅방 내에서 채팅을 보내면 동작하는 라우터 입니다.
-router.post("/room/:id/chat", async (req, res, next) => {
+// 채팅 전송 미들웨어입니다.
+export const postChat = async (req, res, next) => {
   const date = new Date();
   const chatDate = `${date.getFullYear()}.${
     date.getMonth() + 1
@@ -144,6 +107,4 @@ router.post("/room/:id/chat", async (req, res, next) => {
 
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", message);
   res.send("ok");
-});
-
-export default router;
+};
