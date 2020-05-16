@@ -14,12 +14,12 @@ import {
 const roomRouter = express.Router();
 
 // 채팅방 입장을 처리
-roomRouter.get(routes.roomDetail, getRoomDetail);
+roomRouter.get(routes.roomDetail(), getRoomDetail);
 
 // 채팅방 삭제 요청 처리
-roomRouter.delete(routes.roomDetail, deleteRoomDetail);
+roomRouter.delete(routes.roomDetail(), deleteRoomDetail);
 
 // 채팅 송신 처리
-roomRouter.post(routes.sendChat, postChat);
+roomRouter.post(routes.sendChat(), postChat);
 
 export default roomRouter;

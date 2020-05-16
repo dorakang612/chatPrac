@@ -159,3 +159,15 @@ src에 주요 javascript 파일들을 넣습니다. 이유는 babel을 사용하
 - start:dev : 개발 시에 자동으로 수정사항이 생기면 재시작 시키기위해서 사용할 스크립트입니다. --exec은 nodemon의 옵션으로, 뒤에 나오는 스크립트를 수행합니다. babel-node src/app.js는 babel의 presets와 plugins를 고려하여 변환한 이후, node를 실행합니다.
 
 평소 개발 시에는 npm run start:dev를 통해 실행시킵니다.
+
+17. 라우터 분리
+
+현재 routes/index.js에 집중적으로 실려있는 코드들을 각 기능별로 분리합니다.
+
+- src/controllers : 사용자 관리 미들웨어와, 채팅방 관리 미들웨어들을 먼저 선언합니다. routes/index.js에서 user와 room에 관련된 코드들을 분리합니다.
+- routes.js : 해당 서비스의 주소를 관리합니다. 모든 주소를 변수로 선언하여 할당한 뒤 라우터와 app.js에 적용합니다.
+- routes -> routers : 라우터들을 관리하기 위해 파일명을 변경합니다.
+- routers/globalRouter.js : 사용자 등록과 채팅방 생성 그리고 홈화면에 대한 라우터 입니다.
+- routers/userRouter.js : 현재는 사용자 목록을 가져오는 것밖에 기능이 없지만, 추후 로그인을 구현한 뒤 사용자 정보를 수정하는 부분을 추가할 예정입니다.
+- routers/roomRouter.js : 채팅방 이동과 채팅에 관한 처리를하는 라우터 입니다.
+- views/, socket.js : 기존 form의 action과 버튼들 링크들의 주소를 새롭게 수정합니다.

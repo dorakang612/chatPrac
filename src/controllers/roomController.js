@@ -1,4 +1,5 @@
 import routes from "../routes";
+import User from "../models/user";
 import Room from "../models/room";
 
 export const home = async (req, res) => {

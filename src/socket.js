@@ -52,7 +52,7 @@ const webSocket = (server, app, sessionMidleware) => {
       const userCount = currentRoom ? currentRoom.length : 0;
       if (userCount === 0) {
         axios
-          .delete(`http://localhost:3000/room/${roomId}`)
+          .delete(`http://localhost:3000/rooms/${roomId}`)
           .then(() => {
             console.log("방 제거 요청 성공");
           })
