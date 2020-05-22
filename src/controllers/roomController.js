@@ -8,7 +8,11 @@ export const home = async (req, res) => {
   } else {
     try {
       const rooms = await Room.find({});
-      res.render("main", { rooms, title: "채팅방 목록" });
+      res.render("main", {
+        rooms,
+        title: "채팅방 목록",
+        error: req.flash("error"),
+      });
     } catch (error) {
       console.error(error);
       next(error);
@@ -50,11 +54,13 @@ export const getRoomDetail = async (req, res, next) => {
 
     // 방의 존재 여부를 확인합니다.
     if (!room) {
+      req.flash("error", "해당 방이 존재하지 않습니다.");
       return res.redirect(`${routes.home}`);
     }
 
     // 방의 비밀번호를 알맞게 입력했는지 확인합니다.
     if (room.password && room.password !== req.query.password) {
+      req.flash("error", "비밀번호가 일치하지 않습니다.");
       return res.redirect(`${routes.home}`);
     }
 

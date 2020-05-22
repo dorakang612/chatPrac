@@ -1,7 +1,9 @@
 // Global
 const HOME = "/";
-const JOIN = "/join"; // user 가입
 const CREATE = "/create"; // chatting room 생성
+const JOIN = "/join"; // user 가입
+const LOGIN = "/login"; // 로그인
+const LOGOUT = "/logout"; // 로그아웃
 
 // Users
 const USERS = "/users";
@@ -16,6 +18,8 @@ const SEND_CHAT = "/:id/chat";
 const routes = {
   home: HOME,
   join: JOIN,
+  login: LOGIN,
+  logout: LOGOUT,
   create: CREATE,
   users: USERS,
   userDetail: (id) => {

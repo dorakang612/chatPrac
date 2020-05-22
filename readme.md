@@ -171,3 +171,38 @@ src에 주요 javascript 파일들을 넣습니다. 이유는 babel을 사용하
 - routers/userRouter.js : 현재는 사용자 목록을 가져오는 것밖에 기능이 없지만, 추후 로그인을 구현한 뒤 사용자 정보를 수정하는 부분을 추가할 예정입니다.
 - routers/roomRouter.js : 채팅방 이동과 채팅에 관한 처리를하는 라우터 입니다.
 - views/, socket.js : 기존 form의 action과 버튼들 링크들의 주소를 새롭게 수정합니다.
+
+18. 채팅방에 접속 시 문제가 발생하면 경고창을 띄워 줍니다.
+
+```cmd
+>npm i connect-flash
+```
+
+connect-flash 미들웨어는 req 객체에 flash를 추가합니다. req.flash(키, 값)으로 해당 키에 값을 설정하고, req.flash(키)로 해당 키에 대한 값을 불러옵니다. 또한 res.locals.flash도 제공합니다.
+
+- app.js : flash 미들웨어를 사용합니다. 단, session 미들웨어보다 뒤에 선언되어야 합니다.
+- roomController.js : 방에 접근 시 방의 존재 유무, 비밀번호의 일치 여부에 따라 실패시 flash메세지를 보냅니다.
+- views/main.pug : flash 메세지가 있는 경우 error메세지를 띄우도록 합니다.
+
+19. passport 패키지를 사용하기 전에 세션에 대한 설정을 더합니다.
+
+세션을 몽고디비에 저장하겠습니다. 현재는 서버가 재 시작되면 세션이 모두 지워집니다. 이를 수정하고자 connect-mongo 패키지를 설치해 이용해 보겠습니다.
+
+```cmd
+>npm i connect-mongo
+```
+
+- app.js : session의 저장소를 mongoDB로 하였고, cookie에 maxAge를 주어 한시간 동안 유지 할 수 있게끔하였습니다.
+
+20. 로그인 중 첫 단계로 로컬 로그인을 구현합니다.
+
+```cmd
+>npm i passport
+>npm i passport-local
+```
+
+로그인에 대한 패키지 passport와 local strategy 패키지들을 설치합니다.
+
+- routes.js : 회원 등록, 로그인, 로그아웃을 진행하기 위해서 경로를 재 설정합니다. 현재 /join 밖에 없는 절차에 대해서 /auth 경로를 추가하고, authRouter를 추가합니다.
+- passport.js : strategies를 추가합니다. OAuth를 아직 진행하지 않기 때문에 Local Strategy만을 작성합니다.
+- roomController.js : home의 세션확인을 appName이 아닌 logined로 바꾸고, 로그인 되지 않은 상태일 때 redirect 주소를 /auth/login으로 변경합니다.

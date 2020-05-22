@@ -3,7 +3,10 @@ import path from "path";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import mongoose from "mongoose";
+import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
+import flash from "connect-flash";
 dotenv.config();
 
 // 주소 목록을 사용합니다.
@@ -24,14 +27,21 @@ const app = express();
 // DB연결을 수행합니다.
 connectDB();
 
+// 세션 저장을 위한 저장소
+const cookieStore = MongoStore(session);
 // 세션 설정
 const sessionMiddleware = session({
+  secret: `${process.env.COOKIE_SECRET}`,
   resave: false,
   saveUninitialized: true,
-  secret: `${process.env.COOKIE_SECRET}`,
+  store: new cookieStore({
+    mongooseConnection: mongoose.connection,
+    collection: "sessions",
+  }),
   cookie: {
     httpOnly: true,
     secure: false,
+    maxAge: 60 * 60 * 1000,
   },
 });
 
@@ -55,8 +65,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // request의 쿠키를 해석해주는 미들웨어
 app.use(cookieParser(process.env.COOKIE_SECRET));
-// 세션을 이용하기 위한 미들웨어
+// 세션 미들웨어 사용
 app.use(sessionMiddleware);
+// flash 미들웨어 사용
+app.use(flash());
 
 // 라우터 등록
 app.use(routes.home, globalRouter);
