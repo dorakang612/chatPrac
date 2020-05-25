@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
 import flash from "connect-flash";
+import passport from "passport";
 dotenv.config();
 
 // 주소 목록을 사용합니다.
@@ -20,6 +21,9 @@ import roomRouter from "./routers/roomRouter";
 // Socket.IO를 통해 웹소켓을 사용합니다.
 import webSocket from "./socket";
 import connectDB from "./models/connectDB";
+
+// passport strategies 사용
+import "./passport";
 
 // express 객체를 만듭니다.
 const app = express();
@@ -62,13 +66,17 @@ app.use(express.static(path.join(__dirname, "public")));
 // request의 본문을 분석해주는 미들웨어
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 // request의 쿠키를 해석해주는 미들웨어
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
 // 세션 미들웨어 사용
 app.use(sessionMiddleware);
 // flash 미들웨어 사용
 app.use(flash());
+
+//
+app.use(passport.initialize());
+app.use(passport.session());
 
 // 라우터 등록
 app.use(routes.home, globalRouter);

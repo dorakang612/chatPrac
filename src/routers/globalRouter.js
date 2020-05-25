@@ -5,7 +5,13 @@ import express from "express";
 import routes from "../routes";
 
 // 글로벌 라우터에서 사용할 사용자와 채팅방에 대한 미들웨어들을 가져옵니다.
-import { getJoin, postJoin } from "../controllers/userController";
+import {
+  getLogin,
+  postLogin,
+  getLogout,
+  getJoin,
+  postJoin,
+} from "../controllers/userController";
 import {
   home,
   getCreateRoom,
@@ -16,6 +22,11 @@ const globalRouter = express.Router();
 
 // 홈 화면으로 접속 처리
 globalRouter.get(routes.home, home);
+
+//로그인, 로그아웃 처리
+globalRouter.get(routes.login, getLogin);
+globalRouter.post(routes.login, postLogin);
+globalRouter.get(routes.logout, getLogout);
 
 // 사용자 등록 처리
 globalRouter.get(routes.join, getJoin);

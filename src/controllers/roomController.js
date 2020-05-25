@@ -3,9 +3,10 @@ import User from "../models/user";
 import Room from "../models/room";
 
 export const home = async (req, res) => {
-  if (!req.session.inAppName) {
-    res.redirect("/join");
+  if (!req.user) {
+    res.redirect("/login");
   } else {
+    console.log("로그인 성공 정보 : ", req.user);
     try {
       const rooms = await Room.find({});
       res.render("main", {
@@ -30,7 +31,7 @@ export const postCreateRoom = async (req, res, next) => {
   try {
     const room = new Room({
       roomName: req.body.roomName,
-      host: req.session.inAppName,
+      host: req.user.inAppName,
       password: req.body.password,
     });
     const newRoom = await room.save();
@@ -65,7 +66,7 @@ export const getRoomDetail = async (req, res, next) => {
     }
 
     // 채팅방에 참여하면 사용자의 이메일과 inAppName을 참여자 목록에 추가합니다.
-    const user = await User.findOne({ inAppName: req.session.inAppName });
+    const user = await User.findOne({ inAppName: req.user.inAppName });
     const participant = { email: user.email, inAppName: user.inAppName };
     await Room.update(room, { $push: { participants: participant } });
 
@@ -73,7 +74,7 @@ export const getRoomDetail = async (req, res, next) => {
     return res.render("chattingRoom", {
       room,
       title: room.roomName,
-      user: req.session.inAppName,
+      user: req.user.inAppName,
     });
   } catch (error) {
     console.error(error);

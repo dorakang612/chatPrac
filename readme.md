@@ -194,7 +194,13 @@ connect-flash 미들웨어는 req 객체에 flash를 추가합니다. req.flash(
 
 - app.js : session의 저장소를 mongoDB로 하였고, cookie에 maxAge를 주어 한시간 동안 유지 할 수 있게끔하였습니다.
 
-20. 로그인 중 첫 단계로 로컬 로그인을 구현합니다.
+20. 회원등록('/join')을 본격화 합니다.
+
+현재 이메일과 채팅방에서 사용할 이름만을 입력하게 되어있습니다. 사용자의 실명과 비밀번호 입력, 자동 가입 방지용 비밀번호 재입력을 추가합니다.
+
+- /views/joinUser.pug : 이메일, 앱내 사용이름, 비밀번호, 자동 가입 방지용 비밀번호를 입력할 수 있게 수정합니다.
+
+21. 로그인 중 첫 단계로 로컬 로그인을 구현합니다.
 
 ```cmd
 >npm i passport
@@ -203,6 +209,10 @@ connect-flash 미들웨어는 req 객체에 flash를 추가합니다. req.flash(
 
 로그인에 대한 패키지 passport와 local strategy 패키지들을 설치합니다.
 
-- routes.js : 회원 등록, 로그인, 로그아웃을 진행하기 위해서 경로를 재 설정합니다. 현재 /join 밖에 없는 절차에 대해서 /auth 경로를 추가하고, authRouter를 추가합니다.
-- passport.js : strategies를 추가합니다. OAuth를 아직 진행하지 않기 때문에 Local Strategy만을 작성합니다.
-- roomController.js : home의 세션확인을 appName이 아닌 logined로 바꾸고, 로그인 되지 않은 상태일 때 redirect 주소를 /auth/login으로 변경합니다.
+- routes.js : 회원 등록, 로그인, 로그아웃을 진행하기 위해서 경로를 재 설정합니다. 현재 /join 밖에 없는 절차에 대해서 /login과 /logout 경로를 추가합니다.
+- views/login : 로그인 화면을 생성합니다. 회원 가입으로의 링크도 포함합니다.
+- passport.js : strategies를 추가합니다. OAuth를 아직 진행하지 않기 때문에 Local Strategy만을 작성합니다. 또한 passport.serializeUser()와 passport.deserializeUser()를 작성하여 인증 성공시 동작될 메서드들을 작성합니다.
+- app.js : passport에 대한 코드를 app에서 import하여 사용하도록 합니다. 또한 app.use(passport.initialize())와 app.use(passport.session)을 이용해 express가 passport를 이용하고, passport가 session을 이용할 수 있게 합니다.
+- roomController.js : home에서 로그인 확인을 inappName이 아닌 user로 바꾸고, 로그인 되지 않은 상태일 때 redirect 주소를 /login으로 변경합니다. 또한 기존에 session에 담겨있는 정보들을 이용해 채팅방 생성 및 채팅방 접속시 사용자를 구분했습니다. 하지만 passport를 이용하면서 req.user 객체를 이용할 수 있게 되어 이를 활용합니다.
+- userCOntroller.js : getLogin, postLogin, getLogout을 작성합니다.
+- globalRouter.js : /login에 대해서 get과 post 라우터를 작성, logout에 대하여 get 라우터를 작성합니다.
