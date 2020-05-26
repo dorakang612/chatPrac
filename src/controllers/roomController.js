@@ -10,6 +10,7 @@ export const home = async (req, res) => {
     try {
       const rooms = await Room.find({});
       res.render("main", {
+        inAppName: req.user.inAppName,
         rooms,
         title: "채팅방 목록",
         error: req.flash("error"),

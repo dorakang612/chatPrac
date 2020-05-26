@@ -1,6 +1,10 @@
 extends layout
 
 block content
+  div.usercontentWrapper
+    div.userprofile= inAppName
+    div.logoutWapper
+      a(href="/logout") Logout
   fieldset
     legned 채팅방 목록
     table
