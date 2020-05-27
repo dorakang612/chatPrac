@@ -216,3 +216,12 @@ connect-flash 미들웨어는 req 객체에 flash를 추가합니다. req.flash(
 - roomController.js : home에서 로그인 확인을 inappName이 아닌 user로 바꾸고, 로그인 되지 않은 상태일 때 redirect 주소를 /login으로 변경합니다. 또한 기존에 session에 담겨있는 정보들을 이용해 채팅방 생성 및 채팅방 접속시 사용자를 구분했습니다. 하지만 passport를 이용하면서 req.user 객체를 이용할 수 있게 되어 이를 활용합니다.
 - userCOntroller.js : getLogin, postLogin, getLogout을 작성합니다.
 - globalRouter.js : /login에 대해서 get과 post 라우터를 작성, logout에 대하여 get 라우터를 작성합니다.
+
+22. 로그아웃을 구현합니다.
+
+- userController.js : getLogout일 때 passport에서 제공하는 req.logout() 메서드를 이용합니다.
+
+23. 로그인 실패시 에러 메시지를 띄웁니다.
+
+- views/login.pug : error가 있을 시 error메시지를 띄웁니다.
+- userController.js : postLogin이 동작 할때, failureFlash를 true로 둡니다. localStrategy 진행 중에 에러 발생 혹은 인증 실패시 {message:""}를 통해 session에 flash 객체 내 error를 지정합니다. 이를 이용해 사용자의 화면에 실패 메세지를 띄웁니다.

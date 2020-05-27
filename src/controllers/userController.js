@@ -4,18 +4,18 @@ import User from "../models/user";
 import passport from "passport";
 
 export const getLogin = (req, res) => {
-  res.render("login", { title: "로그인" });
+  res.render("login", { title: "로그인", error: req.flash("error") });
 };
 
 // passport의 local strategy를 사용해서 로그인을 진행합니다.
 export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
   failureRedirect: routes.login,
-  failureFlash: "입력 정보를 다시 확인해주세요.",
+  failureFlash: true,
 });
 
 export const getLogout = (req, res) => {
-  req.session.islogin = false;
+  req.logout();
   res.redirect(routes.home);
 };
 

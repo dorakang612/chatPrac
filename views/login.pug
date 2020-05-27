@@ -3,6 +3,7 @@ extends layout
 block content
   div
     .page-title 안녕하세요! Node 채팅 서비스입니다.
+    .err-message= error
     .loginWrapper
       form(action="/login" method="post")
         input(name="email" placeholder="E-Mail")
