@@ -17,6 +17,7 @@ import {
   getCreateRoom,
   postCreateRoom,
 } from "../controllers/roomController";
+import { isLoggedIn, isNotLoggedIn } from "../middlewares";
 
 const globalRouter = express.Router();
 
@@ -24,16 +25,16 @@ const globalRouter = express.Router();
 globalRouter.get(routes.home, home);
 
 //로그인, 로그아웃 처리
-globalRouter.get(routes.login, getLogin);
-globalRouter.post(routes.login, postLogin);
-globalRouter.get(routes.logout, getLogout);
+globalRouter.get(routes.login, isNotLoggedIn, getLogin);
+globalRouter.post(routes.login, isNotLoggedIn, postLogin);
+globalRouter.get(routes.logout, isLoggedIn, getLogout);
 
 // 사용자 등록 처리
-globalRouter.get(routes.join, getJoin);
-globalRouter.post(routes.join, postJoin);
+globalRouter.get(routes.join, isNotLoggedIn, getJoin);
+globalRouter.post(routes.join, isNotLoggedIn, postJoin);
 
 // 채팅방 생성 처리
-globalRouter.get(routes.create, getCreateRoom);
-globalRouter.post(routes.create, postCreateRoom);
+globalRouter.get(routes.create, isLoggedIn, getCreateRoom);
+globalRouter.post(routes.create, isLoggedIn, postCreateRoom);
 
 export default globalRouter;

@@ -225,3 +225,12 @@ connect-flash 미들웨어는 req 객체에 flash를 추가합니다. req.flash(
 
 - views/login.pug : error가 있을 시 error메시지를 띄웁니다.
 - userController.js : postLogin이 동작 할때, failureFlash를 true로 둡니다. localStrategy 진행 중에 에러 발생 혹은 인증 실패시 {message:""}를 통해 session에 flash 객체 내 error를 지정합니다. 이를 이용해 사용자의 화면에 실패 메세지를 띄웁니다.
+
+24. 접근 권한 제어 미들웨어 생성
+
+로그인을 한 사용자가 회원가입과 로그인 라우터에 접근을 한다거나, 로그인되지 않은 사용자가 로그아웃 및 채팅방에 접근을 해서는 안되기 때문에 라우터에 접근을 제어하는 미들웨어가 필요합니다.
+
+passport는 user객체 이외에도 isAuthenticated 메서드를 제공합니다. 로그인 중이라면 req.isAuthenticate()가 true, 아니면 false입니다.
+
+- middlewares.js : 사용자가 로그인 했는지 혹은 로그아웃 된 상태인지 확인하는 미들웨어를 작성합니다.
+- routers/ : 사용자가 로그인 된 상태에서만 이용할 라우터, 로그아웃된 상태에서 이용할 라우터들에 대하여 미들웨어들을 중간에 놔줍니다.
