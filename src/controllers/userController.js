@@ -30,6 +30,11 @@ export const postJoin = async (req, res, next) => {
     body: { email, inAppName, password, password2 },
   } = req;
 
+  const checkUser = await User.findOne({ email: email });
+  if (checkUser) {
+    return res.render("joinUser", { error: "이미 등록된 사용자입니다." });
+  }
+
   if (password !== password2) {
     res.render("joinUser", { error: "비밀번호를 다시 확인해 주세요." });
   } else {
@@ -39,11 +44,6 @@ export const postJoin = async (req, res, next) => {
         inAppName: inAppName,
         password: password,
       });
-
-      const checkUser = User.findOne({ email: user.email });
-      if (checkUser) {
-        return res.render("joinUser", { error: "이미 등록된 사용자입니다." });
-      }
 
       req.session.email = user.email;
       req.session.inAppName = user.inAppName;
