@@ -1,7 +1,10 @@
 import routes from "../routes";
 import User from "../models/user";
 
+import bcrypt from "bcrypt";
 import passport from "passport";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const getLogin = (req, res) => {
   res.render("login", { title: "로그인", error: req.flash("error") });
@@ -16,6 +19,7 @@ export const postLogin = passport.authenticate("local", {
 
 export const getLogout = (req, res) => {
   req.logout();
+  req.session.destroy();
   res.redirect(routes.home);
 };
 
@@ -39,14 +43,19 @@ export const postJoin = async (req, res, next) => {
     res.render("joinUser", { error: "비밀번호를 다시 확인해 주세요." });
   } else {
     try {
+      // 평문으로 된 비밀번호 암호화
+      const hash = await bcrypt.hash(
+        password,
+        parseInt(process.env.SALT_ROUNDS)
+      );
+
+      // 암호화된 비밀번호로 사용자 객체 생성
       const user = new User({
         email: email,
         inAppName: inAppName,
-        password: password,
+        password: hash,
       });
 
-      req.session.email = user.email;
-      req.session.inAppName = user.inAppName;
       await user.save();
       res.redirect(`${routes.home}`);
     } catch (error) {
